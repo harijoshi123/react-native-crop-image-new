@@ -79,6 +79,9 @@ class CropImageModule : ReactContextBaseJavaModule {
     } else {
       promise.reject("Status: false")
     }
+<<<<<<< HEAD
+    
+=======
   }
 
   private fun sendEvent(reactContext: ReactApplicationContext?, eventName: String, @Nullable params: WritableMap) {
@@ -145,4 +148,5 @@ class CropImageModule : ReactContextBaseJavaModule {
     }
   }
 
+>>>>>>> dc75aeb63e8518ebcafb7a56d4a516f2834c8b73
 }
