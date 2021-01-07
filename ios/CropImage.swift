@@ -1,3 +1,5 @@
+import UIKit
+
 @objc(CropImage)
 class CropImage: NSObject {
 
@@ -5,9 +7,6 @@ class CropImage: NSObject {
     func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         resolve(a*b)
     }
-    
-    private let DURATION_SHORT_KEY = "SHORT"
-    private let DURATION_LONG_KEY  = "LONG"
     
     private var emitter: RCTEventEmitter = RCTEventEmitter()
 
@@ -49,6 +48,52 @@ class CropImage: NSObject {
     
     @objc
     func sendEvent(eventName:String, _ params:[String:Any]) {
+        self.emitter.sendEvent(withName: eventName, body: params)
+    }
+}
+
+@objc(CropImageViewManager)
+class CropImageViewManager:NSObject,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
+    
+    private var emitter: RCTEventEmitter = RCTEventEmitter()
+    
+    @objc
+    static func requiresMainQueueSetup() -> Bool {
+        return true
+    }
+    
+    @objc
+    func presentCropView() {
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        let viewController = UIViewController()
+        window.rootViewController = viewController
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            imagePicker.sourceType = .photoLibrary
+            imagePicker.allowsEditing = true
+            viewController.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        var image : UIImage!
+        if let img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        {
+            image = img
+            picker.dismiss(animated: true,completion: nil)
+            if let data = image.pngData() {
+                getImageEvent(eventName: "GET_CROPPED_IMAGE", data.base64EncodedData())
+            }
+        }
+    }
+    
+    @objc
+    func getImageEvent(eventName:String, _ params:Data) {
         self.emitter.sendEvent(withName: eventName, body: params)
     }
 }
