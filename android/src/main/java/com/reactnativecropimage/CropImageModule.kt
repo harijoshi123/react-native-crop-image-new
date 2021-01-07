@@ -19,6 +19,5 @@ class CropImageModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
       promise.resolve(a * b)
     
     }
-
     
 }
