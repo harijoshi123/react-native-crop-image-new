@@ -1,11 +1,15 @@
 package com.reactnativecropimage
 
+import android.R.attr.data
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.util.Log
 import androidx.annotation.Nullable
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import org.json.JSONObject
 import java.util.*
 
@@ -79,9 +83,6 @@ class CropImageModule : ReactContextBaseJavaModule {
     } else {
       promise.reject("Status: false")
     }
-<<<<<<< HEAD
-    
-=======
   }
 
   private fun sendEvent(reactContext: ReactApplicationContext?, eventName: String, @Nullable params: WritableMap) {
@@ -109,19 +110,33 @@ class CropImageModule : ReactContextBaseJavaModule {
     override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, intent: Intent?) {
 //      super.onActivityResult(activity, requestCode, resultCode, intent)
 
-      if (requestCode == IMAGE_PICKER_REQUEST) {
-        if (mPickerPromise != null) {
-          if (resultCode == Activity.RESULT_CANCELED) {
-            mPickerPromise!!.reject(E_PICKER_CANCELLED, "Image picker was cancelled")
-          } else if (resultCode == Activity.RESULT_OK) {
-            val uri = intent!!.data
-            if (uri == null) {
-              mPickerPromise!!.reject(E_NO_IMAGE_DATA_FOUND, "No image data found")
-            } else {
-              mPickerPromise!!.resolve(uri.toString())
-            }
+//      if (requestCode == IMAGE_PICKER_REQUEST) {
+//        if (mPickerPromise != null) {
+//          if (resultCode == Activity.RESULT_CANCELED) {
+//            mPickerPromise!!.reject(E_PICKER_CANCELLED, "Image picker was cancelled")
+//          } else if (resultCode == Activity.RESULT_OK) {
+//            val uri = intent!!.data
+//            if (uri == null) {
+//              mPickerPromise!!.reject(E_NO_IMAGE_DATA_FOUND, "No image data found")
+//            } else {
+//              mPickerPromise!!.resolve(uri.toString())
+//            }
+//          }
+//          mPickerPromise = null
+//        }
+//      }
+      if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        val result = CropImage.getActivityResult(intent)
+        if (resultCode == RESULT_OK) {
+          val resultUri = result.uri
+          if (resultUri == null) {
+            mPickerPromise!!.reject(E_NO_IMAGE_DATA_FOUND, "No image data found")
+          } else {
+            mPickerPromise!!.resolve(resultUri.toString())
           }
-          mPickerPromise = null
+        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+          val error = result.error
+          mPickerPromise!!.reject(E_PICKER_CANCELLED, "Image picker was cancelled")
         }
       }
     }
@@ -137,16 +152,23 @@ class CropImageModule : ReactContextBaseJavaModule {
 
     // Store the promise to resolve/reject when picker returns data
     mPickerPromise = promise
+//    try {
+//      val galleryIntent = Intent(Intent.ACTION_PICK)
+//      galleryIntent.type = "image/*"
+//      val chooserIntent = Intent.createChooser(galleryIntent, "Pick an image")
+//      currentActivity.startActivityForResult(chooserIntent, IMAGE_PICKER_REQUEST)
+//    } catch (e: Exception) {
+//      mPickerPromise!!.reject(E_FAILED_TO_SHOW_PICKER, e)
+//      mPickerPromise = null
+//    }
     try {
-      val galleryIntent = Intent(Intent.ACTION_PICK)
-      galleryIntent.type = "image/*"
-      val chooserIntent = Intent.createChooser(galleryIntent, "Pick an image")
-      currentActivity.startActivityForResult(chooserIntent, IMAGE_PICKER_REQUEST)
+      CropImage.activity()
+        .setGuidelines(CropImageView.Guidelines.ON)
+        .start(currentActivity)
     } catch (e: Exception) {
       mPickerPromise!!.reject(E_FAILED_TO_SHOW_PICKER, e)
       mPickerPromise = null
     }
   }
 
->>>>>>> dc75aeb63e8518ebcafb7a56d4a516f2834c8b73
 }

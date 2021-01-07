@@ -4,6 +4,6 @@ import { NativeModules } from 'react-native';
 //   multiply(a: number, b: number): Promise<number>;
 // };
 
-const { CropImage, CropImageViewManager } = NativeModules;
+const { CropImage } = NativeModules;
 
-export { CropImage, CropImageViewManager };
+export default CropImage;
