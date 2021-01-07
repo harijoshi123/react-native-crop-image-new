@@ -1,32 +1,96 @@
-import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
+import React, { Component } from 'react';
+import { NativeEventEmitter, StyleSheet, Text, View } from 'react-native';
 import CropImage from 'react-native-crop-image';
 
+export default class App extends Component<{}> {
+  state = {
+    status: 'starting',
+    message: '--',
+    status1: 'Starting',
+    promise: '--',
+    threeDifferentTypesMethod: null,
+  };
+  // eventListener: any;
+  async componentDidMount() {
+    // event Listener
+    const eventEmitter = new NativeEventEmitter(CropImage);
+    this.eventListener = eventEmitter.addListener('EventReminder', (event) => {
+      console.log('eventListener', event.event);
+    });
+    // end event Listener
+    CropImage.callbackMethod('Testing', 123, (message: any) => {
+      this.setState({
+        status: 'native callback received',
+        message,
+      });
+    });
 
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+    // call promise function
+    let promise = await CropImage.promiseMethod('Testing', 123);
+    this.setState({
+      status1: 'native promise received',
+      promise,
+    });
+    // call promise function
+    let threeDifferentTypesMethod = await CropImage.threeDifferentTypesMethod(
+      'Testing',
+      123,
+      true
+    );
+    this.setState({
+      threeDifferentTypesMethod,
+    });
 
-  React.useEffect(() => {
-    CropImage.multiply(3, 7).then(setResult);
-  }, []);
+    let picimage = await CropImage.pickImage();
+    console.warn(picimage);
+  }
 
-  return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
-  );
+  componentWillUnmount() {
+    // this.eventListener.remove(); //Removes the listener
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>☆CropImage example☆</Text>
+        <Text style={styles.instructions}>STATUS: {this.state.status}</Text>
+        <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
+        <Text style={styles.instructions}>{this.state.message}</Text>
+
+        <Text style={styles.instructions}>STATUS: {this.state.status1}</Text>
+        <Text style={styles.welcome}>☆NATIVE PROMISE MESSAGE☆</Text>
+        <Text style={styles.instructions}>{this.state.promise}</Text>
+
+        <Text style={styles.welcome}>☆Show Constent☆</Text>
+        <Text style={styles.instructions}>
+          LONG: {CropImage.LONG}, SHORT: {CropImage.LONG}
+        </Text>
+        <Text style={styles.welcome}>
+          ☆Show Three Different Types Of Input Parameters☆
+        </Text>
+        <Text style={styles.instructions}>
+          {JSON.stringify(this.state.threeDifferentTypesMethod)}
+        </Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
   },
 });
