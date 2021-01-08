@@ -4,8 +4,8 @@
 
 
 - (NSDictionary *)constantsToExport {
-    return @{ @"DURATION_SHORT_KEY": @"SHORT",
-              @"DURATION_LONG_KEY": @"LONG"
+    return @{ @"DURATION_SHORT_KEY": @"Test",
+              @"DURATION_LONG_KEY": @"Test1"
     };
 }
 
@@ -25,10 +25,10 @@ RCT_EXTERN_METHOD( sendEvent:(NSString *)eventName :(NSDictionary *)params )
 
 @end
 
-@interface RCT_EXTERN_MODULE(CropImageViewManager, NSObject);
+// @interface RCT_EXTERN_MODULE(CropImageViewManager, NSObject);
 
-RCT_EXTERN_METHOD(getImageEvent:(NSString *)eventName :(NSData *)params)
-RCT_EXTERN_METHOD(presentCropView)
-@end
+// RCT_EXTERN_METHOD(getImageEvent:(NSString *)eventName :(NSData *)params)
+// RCT_EXTERN_METHOD(presentCropView)
+// @end
 
 

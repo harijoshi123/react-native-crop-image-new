@@ -1,7 +1,7 @@
 import UIKit
 
 @objc(CropImage)
-class CropImage: NSObject {
+class CropImage: NSObject,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
 
     @objc(multiply:withB:withResolver:withRejecter:)
     func multiply(a: Float, b: Float, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
@@ -50,18 +50,7 @@ class CropImage: NSObject {
     func sendEvent(eventName:String, _ params:[String:Any]) {
         self.emitter.sendEvent(withName: eventName, body: params)
     }
-}
 
-@objc(CropImageViewManager)
-class CropImageViewManager:NSObject,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
-    
-    private var emitter: RCTEventEmitter = RCTEventEmitter()
-    
-    @objc
-    static func requiresMainQueueSetup() -> Bool {
-        return true
-    }
-    
     @objc
     func presentCropView() {
         let window = UIWindow(frame: UIScreen.main.bounds)
@@ -97,3 +86,4 @@ class CropImageViewManager:NSObject,UINavigationControllerDelegate,UIImagePicker
         self.emitter.sendEvent(withName: eventName, body: params)
     }
 }
+

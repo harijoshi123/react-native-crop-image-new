@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { CropImage, CropImageViewManager } from 'react-native-crop-image';
+import { CropImage } from 'react-native-crop-image';
 
 export default class App extends Component<{}> {
   state = {
@@ -53,7 +53,7 @@ export default class App extends Component<{}> {
       let picimage = await CropImage.pickImage();
       console.warn(picimage);
     } else {
-      CropImageViewManager.presentCropView();
+      CropImage.presentCropView();
     }
   }
 
