@@ -13,7 +13,9 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import org.json.JSONObject
 import java.util.*
 
-
+/*
+* Module class
+* */
 class CropImageModule : ReactContextBaseJavaModule {
 
   private var reactContext: ReactApplicationContext
