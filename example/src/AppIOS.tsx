@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import { NativeEventEmitter, StyleSheet, Text, View } from 'react-native';
-import CropImage from 'react-native-crop-image';
+import {
+  Platform,
+  NativeEventEmitter,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { CropImage, CropImageViewManager } from 'react-native-crop-image';
 
 export default class App extends Component<{}> {
   state = {
@@ -13,10 +19,13 @@ export default class App extends Component<{}> {
   // eventListener: any;
   async componentDidMount() {
     // event Listener
-    const eventEmitter = new NativeEventEmitter(CropImage);
-    this.eventListener = eventEmitter.addListener('EventReminder', (event) => {
-      console.log('eventListener', event.event);
-    });
+    const eventEmitter = new NativeEventEmitter(CropImageViewManager);
+    this.eventListener = eventEmitter.addListener(
+      'GET_CROPPED_IMAGE',
+      (event) => {
+        console.log('eventListener', event.event);
+      }
+    );
     // end event Listener
     CropImage.callbackMethod('Testing', 123, (message: any) => {
       this.setState({
@@ -40,9 +49,12 @@ export default class App extends Component<{}> {
     this.setState({
       threeDifferentTypesMethod,
     });
-
-    let picimage = await CropImage.pickImage();
-    console.warn(picimage);
+    if (Platform.OS === 'android') {
+      let picimage = await CropImage.pickImage();
+      console.warn(picimage);
+    } else {
+      CropImageViewManager.presentCropView();
+    }
   }
 
   componentWillUnmount() {
