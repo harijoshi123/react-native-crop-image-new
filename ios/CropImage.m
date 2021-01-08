@@ -1,11 +1,12 @@
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
 @interface RCT_EXTERN_MODULE(CropImage, NSObject);
 
 
 - (NSDictionary *)constantsToExport {
-    return @{ @"DURATION_SHORT_KEY": @"Test",
-              @"DURATION_LONG_KEY": @"Test1"
+    return @{ @"SHORT": @"Test",
+              @"LONG": @"Test1"
     };
 }
 
@@ -19,9 +20,9 @@ RCT_EXTERN_METHOD(promiseMethod:(NSString *)stringArgument :(nonnull NSNumber *)
 
 RCT_EXTERN_METHOD(threeDifferentTypesMethod:(NSString *)stringArgument :(nonnull NSNumber *)numberArgument :(nonnull BOOL *)status :(RCTPromiseResolveBlock)resolve :(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD( sendEvent:(NSString *)eventName :(NSDictionary *)params )
+// RCT_EXTERN_METHOD( sendEvent:(NSString *)eventName :(NSDictionary *)params )
 
-
+RCT_EXTERN_METHOD(presentCropView)
 
 @end
 

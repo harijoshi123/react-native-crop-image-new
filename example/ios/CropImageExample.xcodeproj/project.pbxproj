@@ -15,7 +15,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CropImageExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CropImageExampleTests.m */; };
-		4C39C56BAD484C67AA576FFA /* libPods-CropImageExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E69C5B9553B26FBA2DF04 /* libPods-CropImageExample.a */; };
+		3F7870F225A85C9F00DB4727 /* libPods-CropImageExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F7870F125A85C9F00DB4727 /* libPods-CropImageExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -49,9 +49,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CropImageExample/main.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* CropImageExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CropImageExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* CropImageExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CropImageExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F7870F125A85C9F00DB4727 /* libPods-CropImageExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-CropImageExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F7870F325A85CCA00DB4727 /* libreact-native-crop-image.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-crop-image.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47F7ED3B7971BE374F7B8635 /* Pods-CropImageExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CropImageExample.debug.xcconfig"; path = "Target Support Files/Pods-CropImageExample/Pods-CropImageExample.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CropImageExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CA3E69C5B9553B26FBA2DF04 /* libPods-CropImageExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CropImageExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-CropImageExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CropImageExample.release.xcconfig"; path = "Target Support Files/Pods-CropImageExample/Pods-CropImageExample.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -69,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C39C56BAD484C67AA576FFA /* libPods-CropImageExample.a in Frameworks */,
+				3F7870F225A85C9F00DB4727 /* libPods-CropImageExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,9 +125,10 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F7870F325A85CCA00DB4727 /* libreact-native-crop-image.a */,
+				3F7870F125A85C9F00DB4727 /* libPods-CropImageExample.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				CA3E69C5B9553B26FBA2DF04 /* libPods-CropImageExample.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -137,7 +139,6 @@
 				47F7ED3B7971BE374F7B8635 /* Pods-CropImageExample.debug.xcconfig */,
 				E00ACF0FDA8BF921659E2F9A /* Pods-CropImageExample.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

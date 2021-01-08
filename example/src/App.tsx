@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import {
   Platform,
   NativeEventEmitter,
   StyleSheet,
   Text,
   View,
+  NativeAppEventEmitter,
 } from 'react-native';
 import { CropImage } from 'react-native-crop-image';
-=======
-import { NativeEventEmitter, StyleSheet, Text, View } from 'react-native';
-import CropImage from 'react-native-crop-image';
->>>>>>> 7dec7b219b793de0990612d872d367de942bd644
 
 export default class App extends Component<{}> {
   state = {
@@ -24,10 +20,12 @@ export default class App extends Component<{}> {
   // eventListener: any;
   async componentDidMount() {
     // event Listener
-    const eventEmitter = new NativeEventEmitter(CropImage);
-    this.eventListener = eventEmitter.addListener('EventReminder', (event) => {
-      console.log('eventListener', event.event);
-    });
+    if(Platform.OS === "android") {
+      const eventEmitter = new NativeEventEmitter(CropImage);
+      NativeAppEventEmitter.addListener('EventReminder', (event) => {
+        console.log('eventListener', event);
+      });
+    }
     // end event Listener
     CropImage.callbackMethod('Testing', 123, (message: any) => {
       this.setState({
@@ -51,18 +49,16 @@ export default class App extends Component<{}> {
     this.setState({
       threeDifferentTypesMethod,
     });
-<<<<<<< HEAD
+
+    const { DURATION_SHORT_KEY } = CropImage.getConstants();
+    console.log(DURATION_SHORT_KEY);
+    
     if (Platform.OS === 'android') {
       let picimage = await CropImage.pickImage();
       console.warn(picimage);
     } else {
       CropImage.presentCropView();
     }
-=======
-
-    let picimage = await CropImage.pickImage();
-    console.warn(picimage);
->>>>>>> 7dec7b219b793de0990612d872d367de942bd644
   }
 
   componentWillUnmount() {

@@ -1,4 +1,5 @@
 import UIKit
+import Foundation
 
 @objc(CropImage)
 class CropImage: NSObject,UINavigationControllerDelegate,UIImagePickerControllerDelegate {
@@ -8,8 +9,7 @@ class CropImage: NSObject,UINavigationControllerDelegate,UIImagePickerController
         resolve(a*b)
     }
     
-    private var emitter: RCTEventEmitter = RCTEventEmitter()
-
+    
     @objc
     static func requiresMainQueueSetup() -> Bool {
         return true
@@ -45,27 +45,28 @@ class CropImage: NSObject,UINavigationControllerDelegate,UIImagePickerController
         resolve("Promise Recived : \(jsonObject)")
         }
     }
-    
-    @objc
-    func sendEvent(eventName:String, _ params:[String:Any]) {
-        self.emitter.sendEvent(withName: eventName, body: params)
-    }
 
-    @objc
+    let queue = DispatchQueue(label: "com.example.my-serial-queue")
+
+    @objc 
     func presentCropView() {
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        let viewController = UIViewController()
-        window.rootViewController = viewController
-        
-        let imagePicker = UIImagePickerController()
-        
-        imagePicker.delegate = self
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.allowsEditing = true
-            viewController.present(imagePicker, animated: true, completion: nil)
-        }
+        queue.async {
+            let window = UIWindow(frame: UIScreen.main.bounds)
+            let viewController = UIViewController()
+            viewController.view.backgroundColor = UIColor.green
+            window.rootViewController = viewController
+            
+            let imagePicker = UIImagePickerController()
+            
+            imagePicker.delegate = self
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                imagePicker.sourceType = .photoLibrary
+                imagePicker.allowsEditing = true
+                viewController.present(imagePicker, animated: true, completion: nil)
+            }
     }
+}
+    
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -76,14 +77,9 @@ class CropImage: NSObject,UINavigationControllerDelegate,UIImagePickerController
             image = img
             picker.dismiss(animated: true,completion: nil)
             if let data = image.pngData() {
-                getImageEvent(eventName: "GET_CROPPED_IMAGE", data.base64EncodedData())
+                // emitter.sendEvent(withName:"EventReminder", body:["status": "Success", "data": data.base64EncodedData()])
             }
         }
-    }
-    
-    @objc
-    func getImageEvent(eventName:String, _ params:Data) {
-        self.emitter.sendEvent(withName: eventName, body: params)
     }
 }
 
