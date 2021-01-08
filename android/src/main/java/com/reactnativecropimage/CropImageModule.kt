@@ -13,7 +13,9 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import org.json.JSONObject
 import java.util.*
 
-
+/*
+* Module class
+* */
 class CropImageModule : ReactContextBaseJavaModule {
 
   private var reactContext: ReactApplicationContext
@@ -25,16 +27,21 @@ class CropImageModule : ReactContextBaseJavaModule {
   }
 
   constructor(reactContext: ReactApplicationContext) : super(reactContext) {
-
+    this.reactContext = reactContext
     // Add the listener for `onActivityResult`
     reactContext.addActivityEventListener(mActivityEventListener);
-    this.reactContext = reactContext
   }
 
+  /*
+  * To return the name of module that will be visible in JavaScript code
+  * */
   override fun getName(): String {
     return "CropImage"
   }
 
+  /*
+  * Overriden method to expose constants to JavaScript code
+  * */
   override fun getConstants(): Map<String, Any> {
     val constants: MutableMap<String, Any> = HashMap<String, Any>()
     constants[Companion.DURATION_SHORT_KEY] = "test"
@@ -42,6 +49,9 @@ class CropImageModule : ReactContextBaseJavaModule {
     return constants
   }
 
+  /*
+  * Method to simulate multiple type arguments and callback
+  * */
   @ReactMethod
   fun callbackMethod(stringArgument: String, numberArgument: Int, callback: Callback) {
     val evt: WritableMap = Arguments.createMap()
@@ -53,6 +63,9 @@ class CropImageModule : ReactContextBaseJavaModule {
     )
   }
 
+  /*
+  * Method to simulate multiple arguments and Promise
+  * */
   @ReactMethod
   fun promiseMethod(stringArgument: String, numberArgument: Int, promise: Promise) {
     val evt: WritableMap = Arguments.createMap()
@@ -65,6 +78,9 @@ class CropImageModule : ReactContextBaseJavaModule {
     }
   }
 
+  /*
+  * Method for simulating Three different types and Promise
+  * */
   @ReactMethod
   fun threeDifferentTypesMethod(stringArgument: String?, numberArgument: Int, status: Boolean, promise: Promise) {
     val evt: WritableMap = Arguments.createMap()
@@ -85,6 +101,9 @@ class CropImageModule : ReactContextBaseJavaModule {
     }
   }
 
+  /*
+  * Helper method to emit an Event
+  * */
   private fun sendEvent(reactContext: ReactApplicationContext?, eventName: String, @Nullable params: WritableMap) {
     reactContext?.apply {
       getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
@@ -107,44 +126,42 @@ class CropImageModule : ReactContextBaseJavaModule {
 
   private val mActivityEventListener: ActivityEventListener = object : BaseActivityEventListener() {
 
+    /*
+    * Result of image selection or capture and cropping is received in this callback method
+    * */
     override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, intent: Intent?) {
 //      super.onActivityResult(activity, requestCode, resultCode, intent)
 
-//      if (requestCode == IMAGE_PICKER_REQUEST) {
-//        if (mPickerPromise != null) {
-//          if (resultCode == Activity.RESULT_CANCELED) {
-//            mPickerPromise!!.reject(E_PICKER_CANCELLED, "Image picker was cancelled")
-//          } else if (resultCode == Activity.RESULT_OK) {
-//            val uri = intent!!.data
-//            if (uri == null) {
-//              mPickerPromise!!.reject(E_NO_IMAGE_DATA_FOUND, "No image data found")
-//            } else {
-//              mPickerPromise!!.resolve(uri.toString())
-//            }
-//          }
-//          mPickerPromise = null
-//        }
-//      }
       if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
         val result = CropImage.getActivityResult(intent)
         if (resultCode == RESULT_OK) {
           val resultUri = result.uri
           if (resultUri == null) {
+            // To reject the Promise
             mPickerPromise!!.reject(E_NO_IMAGE_DATA_FOUND, "No image data found")
           } else {
+            // To resolve the Promise
             mPickerPromise!!.resolve(resultUri.toString())
           }
         } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
           val error = result.error
+          // To reject the Promise
           mPickerPromise!!.reject(E_PICKER_CANCELLED, "Image picker was cancelled")
         }
       }
     }
   }
 
+  /*
+  * Method to expose pick/capture image
+  * functionality to the Javascript
+  * */
   @ReactMethod
   fun pickImage(promise: Promise) {
+
     val currentActivity = currentActivity
+
     if (currentActivity == null) {
       promise.reject(E_ACTIVITY_DOES_NOT_EXIST, "Activity doesn't exist")
       return
@@ -152,19 +169,14 @@ class CropImageModule : ReactContextBaseJavaModule {
 
     // Store the promise to resolve/reject when picker returns data
     mPickerPromise = promise
-//    try {
-//      val galleryIntent = Intent(Intent.ACTION_PICK)
-//      galleryIntent.type = "image/*"
-//      val chooserIntent = Intent.createChooser(galleryIntent, "Pick an image")
-//      currentActivity.startActivityForResult(chooserIntent, IMAGE_PICKER_REQUEST)
-//    } catch (e: Exception) {
-//      mPickerPromise!!.reject(E_FAILED_TO_SHOW_PICKER, e)
-//      mPickerPromise = null
-//    }
+
     try {
+      // Calling the native library code to start
+      // image capture and croppping
       CropImage.activity()
         .setGuidelines(CropImageView.Guidelines.ON)
         .start(currentActivity)
+
     } catch (e: Exception) {
       mPickerPromise!!.reject(E_FAILED_TO_SHOW_PICKER, e)
       mPickerPromise = null
